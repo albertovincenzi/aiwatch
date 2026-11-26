@@ -457,7 +457,14 @@ func (m model) View() string {
 	return b.String() + "\n"
 }
 
+// version is set at release time: -ldflags "-X main.version=1.2.3".
+var version = "dev"
+
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "--version" {
+		fmt.Println("aiwatch", version)
+		return
+	}
 	if _, err := tea.NewProgram(model{ramMB: installedRAMMB(), ncpu: runtime.NumCPU()}, tea.WithAltScreen()).Run(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
